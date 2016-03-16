@@ -14,16 +14,14 @@
  */
 package cz.etnetera.reesmo.adapter.junit.seb;
 
-import cz.etnetera.reesmo.writer.model.result.TestCategory;
-import cz.etnetera.reesmo.writer.model.result.TestType;
-import cz.etnetera.reesmo.writer.storage.FileWithPath;
-
 import org.junit.Before;
 
 import cz.etnetera.reesmo.adapter.junit.ReesmoJUnitBridge;
 import cz.etnetera.reesmo.adapter.junit.ReesmoJUnitTest;
+import cz.etnetera.reesmo.writer.model.result.TestCategory;
+import cz.etnetera.reesmo.writer.model.result.TestType;
+import cz.etnetera.reesmo.writer.storage.FileWithPath;
 import cz.etnetera.seb.Seb;
-import cz.etnetera.seb.event.impl.BeforeSebQuitEvent;
 import cz.etnetera.seb.event.impl.OnFileSaveEvent;
 import cz.etnetera.seb.listener.SebListener;
 
@@ -68,11 +66,6 @@ public interface ReesmoSebJUnitTest extends ReesmoJUnitTest {
 			public void onFileSave(OnFileSaveEvent event) {
 				bridge.addAttachment(new FileWithPath(event.getFile(), "seb/"
 						+ event.getSeb().getReportDir().toPath().relativize(event.getFile().toPath()).toString()));
-			}
-
-			@Override
-			public void beforeSebQuit(BeforeSebQuitEvent event) {
-				
 			}
 
 		});
