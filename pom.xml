@@ -4,7 +4,7 @@
 
 	<groupId>cz.etnetera</groupId>
 	<artifactId>reesmo-adapter-junit-seb</artifactId>
-	<version>0.1.5</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>Reesmo Java Adapter JUnit Seb</name>
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>cz.etnetera</groupId>
 			<artifactId>seb</artifactId>
-			<version>0.4.1</version>
+			<version>0.5.0</version>
 		</dependency>
 	</dependencies>
 	
