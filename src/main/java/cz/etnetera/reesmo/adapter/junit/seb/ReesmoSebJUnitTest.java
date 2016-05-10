@@ -18,14 +18,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestName;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 
 import cz.etnetera.seb.Seb;
 
 /**
  * Base class for JUnit Seb tests backed by Reesmo. It process Seb test and
- * reports result with attachments into Reesmo including failed report o in case
+ * reports result with attachments into Reesmo including failed report in case
  * of failed test. For using it just implement {@link ReesmoSebJUnitTest#createSeb()}
  * method.
  */
@@ -39,48 +37,26 @@ abstract public class ReesmoSebJUnitTest<T extends Seb> {
 
 	protected ReesmoSebJUnitAdapter reesmoAdapter = new ReesmoSebJUnitAdapter();
 
-	protected SebFailedReporter sebFailedReporter = new SebFailedReporter();
+	protected ReesmoSebJUnitWatcher sebWatcher = new ReesmoSebJUnitWatcher();
 
 	@Rule
-	public RuleChain chainedRules = RuleChain.outerRule(testName).around(reesmoAdapter).around(sebFailedReporter);
+	public RuleChain chainedRules = RuleChain.outerRule(testName).around(reesmoAdapter).around(sebWatcher);
 
 	@SuppressWarnings("unchecked")
 	@Before
 	public void before() {
 		seb = (T) createSeb().withListener(reesmoAdapter.getSebListener())
 				.withLabel(getClass().getSimpleName(), testName.getMethodName()).start();
-		sebFailedReporter.setSeb(seb);
+		sebWatcher.setSeb(seb);
 	}
 
 	/**
 	 * This methods should create {@link Seb} instance. It is called from
 	 * {@link ReesmoSebJUnitTest#before()} and appends Reesmo listener, label and
-	 * {@link SebFailedReporter}.
+	 * {@link ReesmoSebJUnitWatcher}.
 	 * 
 	 * @return The new {@link Seb} instance.
 	 */
 	abstract protected T createSeb();
-
-	public class SebFailedReporter extends TestWatcher {
-
-		protected Seb seb;
-
-		public void setSeb(Seb seb) {
-			this.seb = seb;
-		}
-
-		@Override
-		protected void failed(Throwable e, Description description) {
-			if (seb != null)
-				seb.report(FAILED_REPORT);
-		}
-
-		@Override
-		protected void finished(Description description) {
-			if (seb != null)
-				seb.quit();
-		}
-
-	}
 
 }
